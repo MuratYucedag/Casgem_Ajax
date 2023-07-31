@@ -19,11 +19,24 @@
     <buton type="button" id="btncustomerget" class="btn btn-outline-info">Müşteri Getir</buton>
     <br />
     <hr />
+    <h3>Müşteri Listesi</h3>
     <div id="customerlist">
+    </div>
+    <br />
+    <hr />
+    <div>
+        <input type="text" class="form-control" id="txtcustomername" placeholder="Müşteri Adı" />
+        <br />
+        <input type="text" class="form-control" id="txtcustomersurname" placeholder="Müşteri Soyadı" />
+        <br />
+        <input type="text" class="form-control" id="txtcustomercity" placeholder="Müşteri Şehri" />
+        <br />
     </div>
 </div>
 
 <script>
+
+
     $("#btncustomerlist").click(function () {
         $.ajax({
             contentType: "application/json",
@@ -53,4 +66,23 @@
             }
         });
     });
+
+    $("#btncustomeradd").click(function(){
+        let customervalues={
+            Name: $("#txtcustomername").val(),
+            Surname: $("#txtcustomersurname").val(),
+            City: $("#txtcustomercity").val()
+        };
+
+        $.ajax({
+            type:"post",
+            url: "/Default/AddCustomer/",
+            data:customervalues,
+            success:function(funk2){
+                let result=jQuery.parseJSON(funk2);
+                alert("Müşteri Başarılı Bir Şekilde Eklendi");
+            }
+        });
+    });
+
 </script>
