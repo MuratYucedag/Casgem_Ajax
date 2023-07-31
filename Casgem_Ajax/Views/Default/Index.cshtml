@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div class="container">
+    <br />
+    <br />
+    <h3>İşlem Butonları</h3>
+    <hr />
+    <buton type="button" id="btncustomerlist" class="btn btn-outline-primary">Müşteri Listesi</buton>
+    <buton type="button" id="btncustomeradd" class="btn btn-outline-success">Müşteri Ekle</buton>
+    <buton type="button" id="btncustomerdelete" class="btn btn-outline-danger">Müşteri Sil</buton>
+    <buton type="button" id="btncustomeredit" class="btn btn-outline-warning">Müşteri Güncelle</buton>
+    <buton type="button" id="btncustomerget" class="btn btn-outline-info">Müşteri Getir</buton>
+    <br />
+    <hr />
+    <div id="customerlist">
+    </div>
+</div>
+
+<script>
+    $("#btncustomerlist").click(function () {
+        $.ajax({
+            contentType: "application/json",
+            dataType: "json",
+            type: "Get",
+            url: "/Default/CustomerList/",
+            success: function (funk1) {
+                let values = jQuery.parseJSON(funk1);
+                console.log(values);
+                let tablehtml = `<table class=table table-bordered>
+                    <tr>
+                    <th>Müşteri ID</th>
+                    <th>Müşteri Adı</th>
+                    <th>Müşteri Soyadı</th>
+                    <th>Şehir</th>
+                    </tr>`
+                $.each(values, (index, value) => {
+                    tablehtml += `<tr>
+                        <td>${value.CustomerID}</td>
+                        <td>${value.Name}</td>
+                        <td>${value.Surname}</td>
+                        <td>${value.City}</td>
+                        </tr>`
+                });
+                tablehtml+="</table>";
+                $("#customerlist").html(tablehtml);
+            }
+        });
+    });
+</script>
