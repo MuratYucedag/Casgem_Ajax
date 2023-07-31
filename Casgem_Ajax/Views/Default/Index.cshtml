@@ -6,6 +6,8 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
 <div class="container">
     <br />
@@ -25,13 +27,33 @@
     <br />
     <hr />
     <div>
+        <h3>Yeni Müşteri Ekleme Alanı</h3>
         <input type="text" class="form-control" id="txtcustomername" placeholder="Müşteri Adı" />
         <br />
         <input type="text" class="form-control" id="txtcustomersurname" placeholder="Müşteri Soyadı" />
         <br />
         <input type="text" class="form-control" id="txtcustomercity" placeholder="Müşteri Şehri" />
         <br />
+        <hr />
     </div>
+
+    <div>
+        <h3>Müşteri Silme Alanı</h3>
+        <input type="text" class="form-control" id="txtdeletedid" placeholder="Silinecek ID Değerini Giriiz" />
+        <br /><hr />
+    </div>
+
+    <div>
+        <h3>ID'Ye Göre Müşteri Getirme</h3>
+        <input type="text" class="form-control" id="txtgetcustomerid" placeholder="Bilgilerini Getirmek İstediğiniz ID Değerini Giriniz" />
+        <br /><hr />
+    </div>
+
+    <div id="customerlistbyid">
+
+        <br /><hr />
+    </div>
+
 </div>
 
 <script>
@@ -80,7 +102,51 @@
             data:customervalues,
             success:function(funk2){
                 let result=jQuery.parseJSON(funk2);
-                alert("Müşteri Başarılı Bir Şekilde Eklendi");
+                swal("Müşteri Eklendi", "İyi çalışmalar!", "success");
+            }
+        });
+    });
+
+    $("#btncustomerdelete").click(function(){
+        let id = $("#txtdeletedid").val();
+        $.ajax({
+            url: "/Default/DeleteCustomer/"+id,
+            type:"Get",
+            contentType:"application/json",
+            success:function(funk3){
+                swal("Müşteri Başarılı Bir Şekilde Silindi");
+            }
+        });
+    });
+
+    $("#btncustomerget").click(function(){
+        let id=$("#txtgetcustomerid").val();
+
+        $.ajax({
+            contentType:"application/json",
+            dataType:"json",
+            type:"Get",
+            url:"/Default/GetCustomer/",
+            data:{CustomerID:id},
+            success:function(funk4){
+                let result=jQuery.parseJSON(funk4);
+                console.log(result);
+                let htmlstr=`<table class=table table-hover>
+                <tr>
+                <th>Müşteri ID</th>
+                <th>Müşteri Adı</th>
+                <th>Müşteri Soyadı</th>
+                <th>Müşteri Şehri</th>
+                </tr>
+                <tr>
+                <td>${result.CustomerID}</td>
+                <td>${result.Name}</td>
+                <td>${result.Surname}</td>
+                <td>${result.City}</td>
+                </tr>
+                </table>`;
+                $("#customerlistbyid").html(htmlstr);
+               
             }
         });
     });
